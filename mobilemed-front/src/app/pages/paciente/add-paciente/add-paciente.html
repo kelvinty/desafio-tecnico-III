@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>Adicionar Paciente</h2>
+<mat-dialog-content>
+    <form [formGroup]="pacienteForm" class="paciente-form">
+        <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="nome" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>Sobrenome</mat-label>
+            <input matInput formControlName="sobrenome" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>Documento</mat-label>
+            <input matInput formControlName="documento" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>Data de Nascimento</mat-label>
+            <input matInput type="date" formControlName="data_nascimento" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>Sexo</mat-label>
+            <mat-select formControlName="sexo">
+                <mat-option *ngFor="let sex of sexos" [value]="sex">{{ sex }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>Estado Civil</mat-label>
+            <mat-select formControlName="estado_civil">
+                <mat-option *ngFor="let estado of estadosCivis" [value]="estado">{{ estado }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>Nacionalidade</mat-label>
+            <input matInput formControlName="nacionalidade" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>Telefone</mat-label>
+            <input matInput formControlName="telefone" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+        </mat-form-field>
+
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button matButton >Cancelar</button>
+  <button matButton (click)="adiciona()" cdkFocusInitial>Adicionar</button>
+</mat-dialog-actions>

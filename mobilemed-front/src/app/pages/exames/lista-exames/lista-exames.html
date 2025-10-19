@@ -1,0 +1,57 @@
+<h2>Exames</h2>
+
+<button mat-raised-button (click)="adicionarExame()">
+  <mat-icon>add</mat-icon>
+  Exame
+</button>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!-- Tipo de Exame -->
+  <ng-container matColumnDef="tipoExame">
+    <th mat-header-cell *matHeaderCellDef>Tipo de Exame</th>
+    <td mat-cell *matCellDef="let element">{{ element.tipoExame }}</td>
+  </ng-container>
+
+  <!-- Data do Exame -->
+  <ng-container matColumnDef="dataExame">
+    <th mat-header-cell *matHeaderCellDef>Data do Exame</th>
+    <td mat-cell *matCellDef="let element">{{ element.dataExame }}</td>
+  </ng-container>
+
+  <!-- Resultado -->
+  <ng-container matColumnDef="resultado">
+    <th mat-header-cell *matHeaderCellDef>Resultado</th>
+    <td mat-cell *matCellDef="let element">{{ element.resultado }}</td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="pacienteNome">
+    <th mat-header-cell *matHeaderCellDef>Paciente</th>
+    <td mat-cell *matCellDef="let element">{{ element.paciente.nome }}</td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="pacienteDocumento">
+    <th mat-header-cell *matHeaderCellDef>Documento</th>
+    <td mat-cell *matCellDef="let element">{{ element.paciente.documento }}</td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="pacienteEmail">
+    <th mat-header-cell *matHeaderCellDef>Email</th>
+    <td mat-cell *matCellDef="let element">{{ element.paciente.email }}</td>
+  </ng-container>
+
+ 
+  <ng-container matColumnDef="pacienteTelefone">
+    <th mat-header-cell *matHeaderCellDef>Telefone</th>
+    <td mat-cell *matCellDef="let element">{{ element.paciente.telefone }}</td>
+  </ng-container>
+
+  <!-- Header e Row -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<mat-paginator [pageSizeOptions]="[2, 10, 20]" showFirstLastButtons></mat-paginator>
