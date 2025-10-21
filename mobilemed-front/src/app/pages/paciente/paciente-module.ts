@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { PacienteRoutingModule } from './paciente-routing-module';
 import { provideHttpClient } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+
 
 @NgModule({
   declarations: [
@@ -10,9 +12,11 @@ import { provideHttpClient } from '@angular/common/http';
   imports: [
     CommonModule,
     PacienteRoutingModule,
+    RouterModule
   ],
   providers: [
     provideHttpClient(),
+    
   ],
 })
 export class PacienteModule { }

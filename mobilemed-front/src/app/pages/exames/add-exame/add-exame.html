@@ -1,1 +1,45 @@
-<p>add-exame works!</p>
+<h2 mat-dialog-title>Adicionar exame</h2>
+<mat-dialog-content>
+    <form [formGroup]="exameForm">
+        <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>Tipo de Exame (Modalidade DICOM)</mat-label>
+             <mat-select formControlName="tipoExame">
+                <mat-option *ngFor="let m of modalidades" [value]="m">{{ m.label }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="exameForm.get('tipoExame')?.hasError('required')">
+                O tipo de exame é obrigatório.
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>Data do Exame</mat-label>
+            <input matInput formControlName="dataExame" placeholder="YYYY-MM-DD" />
+            <mat-error *ngIf="exameForm.get('dataExame')?.hasError('pattern')">
+            A data deve estar em formato ISO (YYYY-MM-DD).
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-12">
+            <mat-label>Paciente</mat-label>
+            <mat-select formControlName="pacienteId">
+                <mat-option *ngFor="let paciente of (pacientes|async)" [value]="paciente.id">
+                    {{ paciente.nome }} {{ paciente.sobrenome }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="exameForm.get('pacienteId')?.hasError('required')">
+                É necessário selecionar um paciente.
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-12">
+            <mat-label>Resultado</mat-label>
+            <textarea matInput formControlName="resultado"></textarea>
+        </mat-form-field>
+
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button matButton >Cancelar</button>
+  <button matButton (click)="adiciona()" cdkFocusInitial>Adicionar</button>
+</mat-dialog-actions>

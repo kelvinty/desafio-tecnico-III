@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Paciente } from '../../../common/interfaces/paciente';
 import { MatSort } from '@angular/material/sort';
@@ -12,12 +12,14 @@ import { ApagarPaciente } from '../apagar-paciente/apagar-paciente';
 import { EditarPaciente } from '../editar-paciente/editar-paciente';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { loadingService } from '../../../services/loading/loading-service';
+import { RouterLink } from '@angular/router'; 
 
 
 @Component({
   selector: 'app-lista-pacientes',
   imports: [
-    MatTableModule, MatPaginator, ReactiveFormsModule, MatFormFieldModule, MatButtonModule,MatIconModule
+    MatTableModule, MatPaginator, ReactiveFormsModule, MatFormFieldModule, MatButtonModule, MatIconModule, RouterLink
   ],
   templateUrl: './lista-pacientes.html',
   styleUrl: './lista-pacientes.scss'
@@ -40,12 +42,17 @@ export class ListaPacientes {
     'acoes'
   ];
 
+  total = 0;
+  limit = 10;
+  page = 1;
+
   dataSource = new MatTableDataSource<Paciente>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
+    private _loading: loadingService,
     private pacientesService: PacienteService,
     private dialog: MatDialog
   ) {}
@@ -64,8 +71,11 @@ export class ListaPacientes {
   }
 
   listarPacientes() {
-    this.pacientesService.getPacientes().subscribe((resp:any) => {
+    this._loading.show();
+    this.pacientesService.getPacientes(this.page,this.limit).subscribe((resp:any) => {
+      this.total = resp.total;
       this.dataSource.data = resp.data;
+      this._loading.hide();
     });
   }
 
@@ -81,21 +91,23 @@ export class ListaPacientes {
     console.log('Adicionar novo paciente');
   }
 
-  apagarPaciente(id: number) {
+  apagarPaciente(paciente: Paciente) {
     const dialogRef = this.dialog.open(ApagarPaciente,{
       width: '60vw',
+      data: paciente
     });
 
     dialogRef.afterClosed().subscribe(result => {
       this.listarPacientes();
     });
     
-    console.log(`Apagar paciente com ID: ${id}`);
+    console.log(`Apagar paciente com ID: ${paciente.id}`);
   }
 
-  editarPaciente(id: number) {
+  editarPaciente(paciente: Paciente) {
     const dialogRef = this.dialog.open(EditarPaciente,{
       width: '60vw',
+      data: paciente
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -103,7 +115,13 @@ export class ListaPacientes {
     });
     
     // Lógica para editar um paciente existente
-    console.log(`Editar paciente com ID: ${id}`); 
+    console.log(`Editar paciente com ID: ${paciente.id}`); 
+  }
+
+  onPageChange(event: PageEvent) {
+    this.page = event.pageIndex + 1; // MatPaginator é 0-index
+    this.limit = event.pageSize;
+    this.listarPacientes();
   }
 
 }

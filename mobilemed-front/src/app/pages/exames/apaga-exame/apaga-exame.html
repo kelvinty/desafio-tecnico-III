@@ -1,1 +1,8 @@
-<p>apaga-exame works!</p>
+<h2 mat-dialog-title>Atenção</h2>
+<mat-dialog-content>
+  <p>"Tem certeza de que deseja excluir este exame? Esta ação não pode ser desfeita e todos os dados relacionados ao paciente serão permanentemente removidos do sistema."</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button >Cancelar</button>
+  <button mat-raised-button color="warn" (click)="excluir()">Excluir</button>
+</mat-dialog-actions>

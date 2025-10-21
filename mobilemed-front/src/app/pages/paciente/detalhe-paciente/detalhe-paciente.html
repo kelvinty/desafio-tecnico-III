@@ -1,0 +1,44 @@
+<!-- paciente-detalhes.component.html -->
+<!-- paciente-detalhes.component.html -->
+<div class="paciente-container" *ngIf="(paciente|async) as paciente">
+  <div class="paciente-header">
+    <h2>{{ paciente?.nome }} {{ paciente?.sobrenome }}</h2>
+    <span class="subtitulo">{{ paciente?.nacionalidade }} | {{ paciente?.sexo }}</span>
+  </div>
+
+  <div class="paciente-info">
+    <div><strong>Data de Nascimento:</strong> {{ paciente?.data_nascimento | date }}</div>
+    <div><strong>Documento:</strong> {{ paciente?.documento }}</div>
+    <div><strong>Email:</strong> {{ paciente?.email }}</div>
+    <div><strong>Telefone:</strong> {{ paciente?.telefone }}</div>
+    <div><strong>Estado Civil:</strong> {{ paciente?.estado_civil }}</div>
+    <div><strong>Data de Cadastro:</strong> {{ paciente?.data_cadastro | date:'short' }}</div>
+    <div><strong>ID:</strong> {{ paciente?.id }}</div>
+  </div>
+
+  <div class="paciente-actions">
+    <button mat-raised-button color="primary" (click)="adicionarExame()">
+      <mat-icon>add</mat-icon> Adicionar Exame
+    </button>
+  </div>
+</div>
+
+<h3>Exames</h3>
+<hr>
+<div class="exames-container">
+  <mat-card *ngFor="let exame of (exames|async)" class="exame-card">
+    <mat-card-header>
+      <mat-icon >science</mat-icon>
+      <mat-card-title>{{ exame.tipoExame }}</mat-card-title>
+      <mat-card-subtitle>{{ exame.dataExame | date:'shortDate' }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p>ID: {{ exame.id }}</p>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button class="warn" (click)="apagarExame(exame)">Apagar</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { AddExame } from '../add-exame/add-exame';
@@ -11,17 +11,21 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { loadingService } from '../../../services/loading/loading-service';
+import { Exame } from '../../../common/interfaces/exame';
 
 @Component({
   selector: 'app-lista-exames',
   imports: [
-    MatTableModule, MatPaginator, ReactiveFormsModule, MatFormFieldModule, MatButtonModule,MatIconModule
+    MatTableModule, MatPaginator, ReactiveFormsModule, MatFormFieldModule, MatButtonModule,MatIconModule, MatProgressSpinnerModule
   ],
   templateUrl: './lista-exames.html',
   styleUrl: './lista-exames.scss'
 })
 
 export class ListaExames {
+
 // pacientes.component.ts
   displayedColumns: string[] = [
     'tipoExame',
@@ -31,7 +35,12 @@ export class ListaExames {
   //   'pacienteDocumento',
   //   'pacienteEmail',
   //   'pacienteTelefone',
+    'acoes'
   ];
+
+  total = 0;
+  limit = 10;
+  page = 1;
 
   dataSource = new MatTableDataSource<any>();
 
@@ -39,6 +48,7 @@ export class ListaExames {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
+    private _loading: loadingService,
     private exameService: ExameService,
     private dialog: MatDialog
   ) {}
@@ -57,15 +67,17 @@ export class ListaExames {
   }
 
   listarExames() {
-    this.exameService.getExames().subscribe((resp:any) => {
-      console.log(resp);
-      this.dataSource.data = resp;
+    this._loading.show();
+    this.exameService.getExames(this.page, this.limit).subscribe((resp:any) => {
+      this.total = resp.total;
+      this.dataSource.data = resp.data;
+      this._loading.hide();
     });
   }
 
   adicionarExame() {
     const dialogRef = this.dialog.open(AddExame,{
-      width: '60vw',
+      width: '70vw',
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -75,21 +87,23 @@ export class ListaExames {
     console.log('Adicionar novo paciente');
   }
 
-  apagarExame(id: number) {
+  apagarExame(exame:Exame) {
     const dialogRef = this.dialog.open(ApagaExame,{
       width: '60vw',
+      data: exame
     });
 
     dialogRef.afterClosed().subscribe(result => {
       this.listarExames();
     });
     
-    console.log(`Apagar paciente com ID: ${id}`);
+    console.log(`Apagar paciente com ID: ${exame.id}`);
   }
 
-  editarExame(id: number) {
+  editarExame(exame:Exame) {
     const dialogRef = this.dialog.open(UpdateExame,{
       width: '60vw',
+      data: exame
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -97,6 +111,12 @@ export class ListaExames {
     });
     
     // Lógica para editar um paciente existente
-    console.log(`Editar paciente com ID: ${id}`); 
+    console.log(`Editar paciente com ID: ${exame.id}`); 
+  }
+
+  onPageChange(event: PageEvent) {
+    this.page = event.pageIndex + 1; // MatPaginator é 0-index
+    this.limit = event.pageSize;
+    this.listarExames();
   }
 }

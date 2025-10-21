@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { ListaPacientes } from './lista-pacientes/lista-pacientes';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-paciente',
-  imports: [ListaPacientes],
+  imports: [RouterModule],
   templateUrl: './paciente.html',
   styleUrl: './paciente.scss'
 })

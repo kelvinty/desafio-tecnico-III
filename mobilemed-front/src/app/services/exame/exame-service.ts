@@ -22,12 +22,12 @@ export class ExameService {
     return this.http.post('http://localhost:3000/exames', exame,{ headers });
   }
 
-  getExames(){
-    return this.http.get('http://localhost:3000/exames');
+  getExames(page:number, limit:number){
+    return this.http.get(`http://localhost:3000/exames?limit=${limit}&page=${page}`);
   }
 
   updateExame(id:number, exame:any){
-    return this.http.put(`http://localhost:3000/exames/${id}`, exame);
+    return this.http.patch(`http://localhost:3000/exames/${id}`, exame);
   }
 
   delExame(id:number){

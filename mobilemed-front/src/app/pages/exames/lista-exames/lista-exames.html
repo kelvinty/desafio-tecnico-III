@@ -49,9 +49,30 @@
     <td mat-cell *matCellDef="let element">{{ element.paciente.telefone }}</td>
   </ng-container>
 
+  <!-- Data de Cadastro -->
+  <ng-container matColumnDef="acoes">
+    <th mat-header-cell *matHeaderCellDef>Ações</th>
+    <td mat-cell *matCellDef="let exame">
+      <button mat-icon-button color="primary">
+        <mat-icon>visibility</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" (click)="editarExame(exame)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="apagarExame(exame)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
   <!-- Header e Row -->
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 
-<mat-paginator [pageSizeOptions]="[2, 10, 20]" showFirstLastButtons></mat-paginator>
+<mat-paginator
+  [length]="total"
+  [pageSize]="limit"
+  [pageSizeOptions]="[5, 10, 20]"
+  (page)="onPageChange($event)">
+</mat-paginator>
